@@ -23,7 +23,7 @@
       border-radius: 20px;
       text-align: center;
       width: 90%;
-      max-width: 400px;
+      max-width: 420px;
       box-shadow: 0 20px 40px rgba(255, 105, 180, 0.3);
       position: relative;
     }
@@ -31,15 +31,13 @@
     h1 {
       color: #ff4fa3;
       font-size: 26px;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
 
     .buttons {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
       position: relative;
       height: 120px;
+      margin-top: 20px;
     }
 
     button {
@@ -49,18 +47,12 @@
       font-size: 18px;
       cursor: pointer;
       transition: all 0.3s ease;
+      user-select: none;
     }
 
     #yesBtn {
       background: #ff4fa3;
       color: white;
-      position: relative;
-    }
-
-    #yesBtn span {
-      font-size: 10px;
-      opacity: 0.4;
-      display: none;
     }
 
     #noBtn {
@@ -70,23 +62,11 @@
       right: 0;
     }
 
-    .shake {
-      animation: shake 0.3s infinite;
-    }
-
-    @keyframes shake {
-      0% { transform: translate(0); }
-      25% { transform: translate(2px, -2px); }
-      50% { transform: translate(-2px, 2px); }
-      75% { transform: translate(2px, 2px); }
-      100% { transform: translate(0); }
-    }
-
     .tease {
-      font-size: 14px;
+      margin-top: 15px;
+      min-height: 24px;
       color: #ff4fa3;
-      margin-top: 10px;
-      min-height: 20px;
+      font-size: 15px;
     }
 
     .result {
@@ -95,13 +75,14 @@
     }
 
     .love-note {
-      margin-top: 15px;
+      margin-top: 10px;
       font-size: 14px;
       color: #ff4fa3;
     }
 
     .heart {
       position: fixed;
+      font-size: 18px;
       color: #ff4fa3;
       animation: fall linear forwards;
       pointer-events: none;
@@ -116,8 +97,7 @@
       position: fixed;
       width: 8px;
       height: 8px;
-      background: #ff4fa3;
-      animation: confettiFall 2s linear forwards;
+      animation: confettiFall 2.5s linear forwards;
     }
 
     @keyframes confettiFall {
@@ -125,6 +105,11 @@
         transform: translateY(100vh) rotate(720deg);
         opacity: 0;
       }
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 22px; }
+      button { font-size: 16px; padding: 12px 22px; }
     }
   </style>
 </head>
@@ -134,9 +119,7 @@
     <h1>Will you be my Valentine,<br>meri pyari madam ji? 💕🌹</h1>
 
     <div class="buttons">
-      <button id="yesBtn">
-        YES 💖 <span>(no)</span>
-      </button>
+      <button id="yesBtn">YES 💖</button>
       <button id="noBtn">NO 🙈</button>
     </div>
 
@@ -146,90 +129,75 @@
       <h2>Good choice ❤️<br>I knew you’d say yes 😘</h2>
       <p>Now you’re officially my Valentine forever 💞</p>
       <div class="love-note">
-        Main aapka ab officially gulaam ban chuka hoon, meri pyari madam.<br>
-        Peeche peeche chalunga meri madam de naal ❤️<br>
+        Main aapka ab officially gulaam ban chuka hoon meri pyari madam 💗<br>
+        <strong>peeche peeche chalunga meri madam de naal 💗</strong><br>
         Love you meri madam 💞
       </div>
     </div>
   </div>
 
   <script>
-    const noBtn = document.getElementById('noBtn');
-    const yesBtn = document.getElementById('yesBtn');
-    const teaseText = document.getElementById('teaseText');
-    const result = document.getElementById('result');
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const teaseText = document.getElementById("teaseText");
+    const result = document.getElementById("result");
 
     let attempts = 0;
-    let speed = 300;
 
     const teasers = [
       "Arre pakad hi nahi paa rahi 😜",
-      "Itna mushkil bhi nahi… ya shayad hai 😈"
+      "Itna mushkil bhi nahi… ya shayad hai 😈",
+      "Soch lo acche se 🙃",
+      "YES hi likha hai tumhari kismat mein 💗"
     ];
 
-    noBtn.addEventListener('mouseenter', () => {
+    function moveNoButton() {
       attempts++;
-      speed = Math.max(50, speed - 20);
 
-      const x = Math.random() * 200 - 100;
+      const x = Math.random() * 220 - 110;
       const y = Math.random() * 120 - 60;
 
       noBtn.style.transform = `translate(${x}px, ${y}px)`;
-      noBtn.style.transitionDuration = speed + 'ms';
-      noBtn.classList.add('shake');
-
       teaseText.textContent = teasers[attempts % teasers.length];
 
-      if (attempts >= 12) {
-        noBtn.style.display = 'none';
-        yesBtn.querySelector('span').style.display = 'inline';
+      if (attempts >= 10) {
+        noBtn.style.display = "none";
+        teaseText.textContent = "Bas bas 😌 ab YES hi bacha hai 💕";
       }
+    }
+
+    noBtn.addEventListener("mouseenter", moveNoButton);
+    noBtn.addEventListener("touchstart", moveNoButton);
+
+    yesBtn.addEventListener("click", () => {
+      result.style.display = "block";
+      heartRain();
+      confettiBlast();
     });
 
-    yesBtn.addEventListener('click', () => {
-      result.style.display = 'block';
-      heartExplosion();
-      confettiYES();
-      spellName();
-    });
-
-    function heartExplosion() {
-      for (let i = 0; i < 40; i++) {
-        const heart = document.createElement('div');
-        heart.className = 'heart';
-        heart.textContent = '💗';
-        heart.style.left = Math.random() * 100 + 'vw';
-        heart.style.animationDuration = (2 + Math.random() * 3) + 's';
+    function heartRain() {
+      for (let i = 0; i < 35; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.textContent = "💗";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (2 + Math.random() * 3) + "s";
         document.body.appendChild(heart);
         setTimeout(() => heart.remove(), 5000);
       }
     }
 
-    function confettiYES() {
-      for (let i = 0; i < 60; i++) {
-        const c = document.createElement('div');
-        c.className = 'confetti';
-        c.style.left = Math.random() * 100 + 'vw';
-        c.style.top = '-10px';
-        c.style.background = ['#ff4fa3','#ff85c8','#ffc1e3'][i % 3];
+    function confettiBlast() {
+      const colors = ["#ff4fa3", "#ff85c8", "#ffc1e3"];
+      for (let i = 0; i < 50; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.top = "-10px";
+        c.style.background = colors[i % colors.length];
         document.body.appendChild(c);
         setTimeout(() => c.remove(), 3000);
       }
-    }
-
-    function spellName() {
-      const name = "Pyari Tanisha Madam ji 💗";
-      [...name].forEach((ch, i) => {
-        setTimeout(() => {
-          const h = document.createElement('div');
-          h.className = 'heart';
-          h.textContent = ch;
-          h.style.left = (10 + i * 3) + 'vw';
-          h.style.animationDuration = '4s';
-          document.body.appendChild(h);
-          setTimeout(() => h.remove(), 5000);
-        }, i * 150);
-      });
     }
   </script>
 
